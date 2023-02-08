@@ -8,7 +8,7 @@ import base_data_table from '../fuente/tabladedatos';
 import FilterComponent from './filtrotabla';
 import Piepagina from "./footer2";
 import { URL_BACKEND } from '../enviroments/enviroments';
-import axios from "axios";
+import axiosInstance from "../axiosApi/axiosApi";
 
 const Dashboard = () => {
     const [pacientes,setPacientes]=useState([]);
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
     const listarResumen=()=>{
         if(idempresa >0){
-        axios.get(URLResumen)
+            axiosInstance.get(URLResumen)
         .then(response=>{
             setResumen_est(response.data);
             cargar_grafico(response.data);
@@ -111,7 +111,7 @@ const Dashboard = () => {
 
     const listar=()=>{
         if(idempresa >0){
-        axios.get(URL)
+            axiosInstance.get(URL)
         .then(response=>{
            setPacientes(response.data);
         })

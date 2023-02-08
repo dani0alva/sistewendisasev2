@@ -4,16 +4,16 @@ import {Routes,Route, useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import axiosInstance from "../../axiosApi/axiosApi";
 import swal from 'sweetalert'
-import { setAuthToken } from "../config/authToken";
-import piepagina from "../footer2";
 import Footer from '../footer';
+import { URL_BACKEND } from '../../enviroments/enviroments';
 
 const LoginEmp =()=>{
 
-    
+    /*let setearnerodoc = props.setearnerodoc;*/
     const [email, setEmail] = useState("")
     const [contraseña, setContraseña] = useState("")
     const [desabilitarboton, setDesabilitarboton] = useState(false)
+    
     
     let idempresa;
     if (typeof window !== "undefined") {
@@ -30,11 +30,17 @@ const LoginEmp =()=>{
         usunroDoc=localStorage.getItem("usu_nroDoc")
     }
 
+    let logoem;
+    if (typeof window !== "undefined") {
+        logoem=localStorage.getItem("access_logo")
+    }
+
     const [empresa_id,setEmpresaid]=useState(idempresa);
     const [empresa_rs,setEmpresars]=useState(rsempresa);
     const [usu_nroDoc,setUsuNeroDoc]=useState(usunroDoc);
+    const [logoempresa,setLogoEmpresa]=useState(logoem)
     
-
+    const URL = `${URL_BACKEND}/empresadetail/`;
    
 
     const [token,setToken]=useState("");
@@ -81,29 +87,9 @@ const LoginEmp =()=>{
         let usuario={
             username:email,
             password:contraseña}
-             /*
-            try {
-                const response =  await axiosInstance.post('/token/obtain/', usuario);
-                console.log("el token es : "+response);
-                axiosInstance.defaults.headers['Authorization'] = "JWT" + response.data.access;
-                const token  =  response.data.token;
-                setToken(token);
-                localStorage.setItem('access_token', response.data.access)
-                localStorage.setItem('refresh_token', response.data.refresh);
-                
-
-                mostrarAlertExito();
-                return response;
-
-            } catch (error) {
-                mostrarAlertError();
-                throw error;
-            }*/
-
+             
              await axiosInstance.post('/token/obtain/', usuario)
             .then((res) => {
-
-                console.log(res);
 
                 localStorage.setItem("access_token", res.data.access);
                 localStorage.setItem("refresh_token", res.data.refresh);
@@ -124,10 +110,23 @@ const LoginEmp =()=>{
                 setEmpresars(rs);
                 setUsuNeroDoc(usu_nroDoc);
 
+                /*setearnerodoc;*/
+
                 //setToken(token);
                 /*this.setState({
                     loggedIn: true,
                 });*/
+
+                axiosInstance.get(URL+id)
+                .then((res) => {
+                    
+                console.log("la respuesta es:",res.data.empresa_log)
+                localStorage.setItem("access_logo", res.data.empresa_log);
+                setLogoEmpresa(res.empresa_log)
+                })
+                .catch((err) => {
+                    console.log(err.message);
+            });
 
                 mostrarAlertExito();
             })
@@ -142,8 +141,19 @@ const LoginEmp =()=>{
         /*localStorage.setItem("access_token",JSON.stringify(token));*/
         localStorage.setItem("empresa_id", JSON.stringify(empresa_id));
         localStorage.setItem("empresa_rs", empresa_rs);
-        localStorage.setItem("usu_nroDoc", usu_nroDoc);
+        
+
     },[empresa_rs])
+
+    useEffect (()=>{
+        localStorage.setItem("usu_nroDoc", usu_nroDoc);
+        
+
+    },[])
+
+    useEffect(()=>{
+        localStorage.setItem("access_logo", logoempresa);
+    },[])
 
     return(
 

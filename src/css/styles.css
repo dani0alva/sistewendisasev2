@@ -11699,3 +11699,10 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+.card_logo {
+
+  height: 50px !important;
+  width: auto !important;
+  border-radius: 0.25rem !important;
+}

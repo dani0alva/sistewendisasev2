@@ -150,7 +150,7 @@ const manejadorSubmit=(e)=>{
 
     e.preventDefault();
 
-    registrar(empresa_id,nombre,apellidos,email,tipoDoc,nroDoc,telefono,pais,ciudad,sexo,contraseña,contraseñar);
+    registrar(empresa_id,nombre,apellidos,email,tipoDoc,nroDoc,telefono,pais,ciudad,sexo,startDate,contraseña,contraseñar);
     /*window.location.reload();*/
     
 
@@ -159,7 +159,7 @@ const manejadorSubmit=(e)=>{
 
 
 
-const registrar=(empresa_id,nombre,apellidos,email,tipo_documento,nero_documento,telefono,pais,ciudad,sexo,contraseña,contraseñar)=>{
+const registrar=(empresa_id,nombre,apellidos,email,tipo_documento,nero_documento,telefono,pais,ciudad,sexo,startDate,contraseña,contraseñar)=>{
     
     let usuario={
         empresa_id:empresa_id,
@@ -174,11 +174,15 @@ const registrar=(empresa_id,nombre,apellidos,email,tipo_documento,nero_documento
         nero_doc:nero_documento,
         telefono:telefono,
         sexo:sexo,
+        fecha_nac:startDate.getFullYear()+'-'+startDate.getMonth()+'-'+startDate.getDate(),
         registro:2
     }
 
+    
+
     if(email!=="")
     { 
+      
         if(nroDoc!=="")
         { 
             if(contraseña===contraseñar && contraseña!=="")
@@ -201,6 +205,7 @@ const registrar=(empresa_id,nombre,apellidos,email,tipo_documento,nero_documento
         }else{
             mostrarAlertWarningDocumento();
         }
+        
     }else{
         mostrarAlertWarningEmail();
     }
@@ -348,7 +353,7 @@ return(
                                     </div>
                                     <div className="card-footer text-center py-3">
                                    
-                                        <div className="small"><a href="#"  onClick={()=>handlerLogin()}>Tienes una cuenta? Ir al login</a></div>
+                                        {/*<div className="small"><a href="#"  onClick={()=>handlerLogin()}>Tienes una cuenta? Ir al login</a></div>*/}
                                     </div>
                                 </div>
                             </div>

@@ -77,22 +77,23 @@ const login =()=>{
             username:email,
             password:contraseña}
             
-            try {
-                const response =  await axiosInstance.post('/token/obtain/', usuario);
-                
-                axiosInstance.defaults.headers['Authorization'] = "JWT " + response.data.access;
-                
-                setToken(response.data.access);
-                localStorage.setItem('access_token', response.data.access);
-                localStorage.setItem('refresh_token', response.data.refresh);
+                await axiosInstance.post('/token/obtain/', usuario)
+                .then((res) => {
+    
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
+
+                setToken(token);
 
                 mostrarAlertExito();
                 return response;
-
-            } catch (error) {
+            })
+            .catch((err) => {
+                console.log(err.message);
                 mostrarAlertError();
-                throw error;
-            }
+            });
+
+           
     }
 
     return(

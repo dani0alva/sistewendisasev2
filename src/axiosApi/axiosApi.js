@@ -33,35 +33,38 @@ axiosInstance.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if (
+        /*if (
             error.response.status === 401 &&
             originalRequest.url === baseURL + 'token/refresh/'
         ) {
             window.location.href = '/login/';
             return Promise.reject(error);
-        }
+        }*/
 
         if (
             error.response.data.code === 'token_not_valid' &&
             error.response.status === 401 &&
             error.response.statusText === 'Unauthorized'
         ) {
+
+            console.log("entro aqui")
             const refreshToken = localStorage.getItem('refresh_token');
+            console.log("el token refresh es: "+refreshToken)
 
             if (refreshToken) {
                 const tokenParts = JSON.parse(atob(refreshToken.split('.')[1]));
 
                 // exp date in token is expressed in seconds, while now() returns milliseconds:
                 const now = Math.ceil(Date.now() / 1000);
-                console.log(tokenParts.exp);
+                console.log("----"+tokenParts.exp);
 
                 if (tokenParts.exp > now) {
                     return axiosInstance
                         .post('/token/refresh/', { refresh: refreshToken })
                         .then((response) => {
                             localStorage.setItem('access_token', response.data.access);
-                            localStorage.setItem('refresh_token', response.data.refresh);
-
+                            /*localStorage.setItem('refresh_token', response.data.refresh);*/
+                            
                             axiosInstance.defaults.headers['Authorization'] =
                                 'JWT ' + response.data.access;
                             originalRequest.headers['Authorization'] =

@@ -8,12 +8,13 @@ const titulo=props.titulo;
 const [isLoggedin, setIsLoggedin] = useState(false);
 const navigate = useNavigate()
 
+
 const enviarDahsboard = () => {
     navigate('/dashboard')
 }
 
-const enviarLogin = () => {
-    navigate('/login')
+const enviarCrearPaciente = () => {
+    navigate('/registro')
 }
 
 const enviarLoginEmpresa = () => {
@@ -67,7 +68,7 @@ const logout = () => {
 
              <li><hr className="dropdown-divider" /></li>
              <li><a className="dropdown-item" href="#" onClick={()=>enviarLoginEmpresa()}>Login Empresa</a></li>
-             <li><a className="dropdown-item" href="#" onClick={()=>enviarLogin()}>Login Paciente</a></li>
+             <li><a className="dropdown-item" href="#" onClick={()=>enviarCrearPaciente()}>Crear Paciente</a></li>
              <li><hr className="dropdown-divider" /></li>
              <li><a className="dropdown-item" href="#" onClick={()=>enviarGraficos()}>Graficos</a></li>
              <li><a className="dropdown-item" href="#" onClick={()=>enviarTablas()}>Tablas</a></li>

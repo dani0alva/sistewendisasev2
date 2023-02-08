@@ -375,7 +375,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     const listar=()=>{
         if(empresa_id >0){
         if( servEmpId !== null & servEmpId !== undefined){
-            axios.get(URLFILTRO)
+            axiosInstance.get(URLFILTRO)
             .then(response=>{
                 setPacientes([response.data]);
             })
@@ -388,7 +388,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
             /*lista los pacientes*/ 
 
             
-            axios.get(URL)
+            axiosInstance.get(URL)
             .then(response=>{
                setPacientes(response.data);
             })
@@ -398,7 +398,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
             })
 
              /*lista disase*/
-            axios.get(URLDISASE)
+             axiosInstance.get(URLDISASE)
             .then(response=>{
                 set_disase(response.data);
             })
@@ -603,7 +603,7 @@ async function postregistrar(e){
             diag_rnroDoc:usu_nroDoc
         }
 
-        
+        console.log("xml de diagnostico es:"+JSON.stringify(diagnostico));
 
     
         if(iddisase!=='Disase')

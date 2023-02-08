@@ -6,7 +6,7 @@ import DataTable from 'react-data-table-component';
 import base_data_table from '../fuente/tabladedatos';
 import FilterComponent from './filtrotabla';
 import Piepagina from "./footer2";
-import axios from "axios";
+import axiosInstance from "../axiosApi/axiosApi";
 import { URL_BACKEND } from '../enviroments/enviroments';
 
 const Tablas = () => {
@@ -66,7 +66,7 @@ const Tablas = () => {
 
     const listar=()=>{
         if(idempresa >0){ 
-             axios.get(URL)
+            axiosInstance.get(URL)
              .then(response=>{
                 setPacientes(response.data);
              })

@@ -18,10 +18,13 @@ import CargarDetallePaciente from './cargar_detalle_pc';
 import LoginEmp from './login/loginEmp';
 import RegistroEmp from './login/registroEmp';
 import { URL_BACKEND } from '../enviroments/enviroments';
-
-
+import axiosInstance from "../axiosApi/axiosApi";
 const Menuprincipal=(props)=>{
 
+    let usunroDoc;
+    if (typeof window !== "undefined") {
+        usunroDoc=localStorage.getItem("usu_nroDoc")
+    }
 
     let idempresa;
     if (typeof window !== "undefined") {
@@ -33,6 +36,15 @@ const Menuprincipal=(props)=>{
        rsempresa=localStorage.getItem("empresa_rs")
     }
 
+    let logoem;
+    if (typeof window !== "undefined") {
+        logoem=localStorage.getItem("access_logo")
+    }
+
+    
+    const [usu_nroDoc,setUsuNeroDoc]=useState(usunroDoc);
+    const [logoempresa,setLogoEmpresa]=useState(logoem)
+
     const [empresa_id,setEmpresaid]=useState(idempresa);
     const [empresa_rs,setEmpresars]=useState(rsempresa);
 
@@ -40,11 +52,15 @@ const Menuprincipal=(props)=>{
 
     const [servicioEmpresa,setservicioEmpresa]=useState([]);
 
+    /*const setearnerodoc=()=>{
+        setUsuNeroDoc("78784654");
+        console.log("entra aqui")
+    }*/
 
     const listar=()=>{
 
         if(empresa_id>0){
-        axios.get(URL)
+            axios.get(URL)
         .then(response=>{
             setservicioEmpresa(response.data);
         })
@@ -56,7 +72,15 @@ const Menuprincipal=(props)=>{
 
     useEffect(()=>{
         listar();
+
     },[])
+
+
+/*
+   useEffect(()=>{
+        setUsuNeroDoc(usunroDoc);
+
+    },[usu_nroDoc])*/
     
     useEffect (()=>{
         localStorage.setItem("empresa_id", JSON.stringify(empresa_id));
@@ -64,7 +88,7 @@ const Menuprincipal=(props)=>{
 
     return(
         <div className="sb-nav-fixed">
-      <NavBar titulo="Start BootStrap"/>
+      <NavBar logo={logoempresa}/>
      <div id="layoutSidenav">
 
             <div id="layoutSidenav_nav">
@@ -73,7 +97,7 @@ const Menuprincipal=(props)=>{
                         <div className="nav">
                             <div className="sb-sidenav-menu-heading">Core</div>
                             {/*<a className="nav-link" href="index.html">*/}
-                              <Link to="/" className="nav-link" >
+                              <Link to="/dashboard" className="nav-link" >
                               <nav className="sb-sidenav-menu-nested nav">
                                 <div className="sb-nav-link-icon"><i className="fas fa-tachometer-alt"></i></div>
                                 Dashboard
@@ -84,7 +108,7 @@ const Menuprincipal=(props)=>{
                               <div className="sb-nav-link-icon"><i className="fas fa-book-open"></i></div>
                                 <nav className="sb-sidenav-menu-nested nav">
                                     <Link to="/loginEmp" className="nav-link" >Login Empresa</Link>
-                                    <Link to="/login" className="nav-link" >Login Paciente</Link>
+                                    <Link to="/registro" className="nav-link" >Crear Paciente</Link>
                                 </nav>
                              
                             <Link to="/charts" className="nav-link" >
@@ -107,8 +131,8 @@ const Menuprincipal=(props)=>{
                         </div>
                     </div>
                     <div className="sb-sidenav-footer">
-                        <div className="small">Logged in as:</div>
-                        Start Bootstrap
+                        <div className="small">Logeado con DNI:</div>
+                        {usu_nroDoc}
                     </div>
                 </nav>
             </div>
@@ -116,11 +140,11 @@ const Menuprincipal=(props)=>{
         <DataContextProvider>
                 <Routes>
 
-                    <Route path='/' element={<Dashboard/>}/>
+                    <Route path='/' element={<LoginEmp/>}/>
                     <Route path='/dashboard' element={<Dashboard/>}/>
                     <Route path='/filtro' element={<Boton/>}/>
                     <Route path='/charts' element={<Charts/>}/>
-                    <Route path='/loginEmp' element={<LoginEmp/>}/>   
+                    <Route path='/loginEmp' element={<LoginEmp  /*setearnerodoc={setearnerodoc}*//> }/>   
                     <Route path='/login' element={<Login/>}/> 
                     <Route path='/tablas' element={<Tablas/>}/>    
                     <Route path='/CargaDetPac' element={<CargarDetallePaciente/>}/>   
@@ -135,9 +159,6 @@ const Menuprincipal=(props)=>{
         
         </div>
         
-
-        {/*AddLibrary1(
-                "https://cdn.jsdelivr.net/npm/simple-datatables@latest")*/}
 
         </div>
        

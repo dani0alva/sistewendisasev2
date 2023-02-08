@@ -5,9 +5,9 @@ import AnyChart from 'anychart-react/dist/anychart-react.min.js'
 import { useNavigate} from 'react-router-dom'
 import Piepagina from "./footer2";
 import base_data_table from '../fuente/tabladedatos';
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { URL_BACKEND } from '../enviroments/enviroments';
+import axiosInstance from "../axiosApi/axiosApi";
 
 const Charts = () => {
 
@@ -116,7 +116,7 @@ const Charts = () => {
 
   const listar_disase=()=>{
      /*lista disase*/
-     axios.get(URLDISASE)
+     axiosInstance.get(URLDISASE)
      .then(response=>{
          set_disase(response.data);
      })
@@ -134,7 +134,7 @@ const Charts = () => {
   const listar=()=>{
     if(idempresa >0)
     {
-        axios.get(URL)
+        axiosInstance.get(URL)
         .then(response=>{
             setResumen_est_dis(response.data);
             
@@ -150,7 +150,7 @@ const Charts = () => {
   const listarResumenAcum=()=>{
     if(idempresa >0)
     {
-        axios.get(URLACUM)
+        axiosInstance.get(URLACUM)
         .then(response=>{
             setResumen_est(response.data);
             cargar_graficoAcum(response.data);
@@ -179,6 +179,8 @@ useEffect (()=>{
     /*localStorage.setItem("access_token",JSON.stringify(token));*/
     localStorage.setItem("empresa_id", JSON.stringify(empresa_id));
 },[empresa_id])
+
+
 
     return (
        
