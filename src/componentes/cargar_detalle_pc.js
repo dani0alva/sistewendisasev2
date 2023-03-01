@@ -34,6 +34,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     const [desabilitarcheck, setDesabilitarcheck] = useState(false);
     const [desabilitarcarga, setDesabilitarcarga] = useState(false);
     const [desabilitarcombo, setDesabilitarcombo] = useState(false);
+    const [desabilitaronlyimg, setDesabilitarcargaonlyimg] = useState(true);
 
     const [respDNI, setResponsableDni] = useState(''); 
 
@@ -63,6 +64,8 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     const [image_left,setImgLeft] = useState(null);
     const [image_right,setImgRigth] = useState(null);
     const [pacientes,setPacientes]=useState([]);
+
+    const [imagenes,setImagenes]=useState(null);
 
     const [disase,set_disase] = useState([]);
 
@@ -130,24 +133,110 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     
 
     const referencia =useRef()
+    const referencia2 =useRef()
+    const referencia3 =useRef()
    //USE REF
    
-   const uploadFiles = () =>{
-    /*referencia.current.click()*/
-    
+   const uploadFilesleft = () =>{
+    referencia2.current.click()
    }
+
+   const uploadFilesright = () =>{
+    referencia3.current.click()
+   }
+
+
    //este estado servira para mostrar la imagen capturada
    const [preview,setPreview] = useState('');
    const [preview2,setPreview2] = useState('');
-
    /*carga de imagenes de la tabla*/
    const [preview3,setPreview3] = useState("");
    const [preview4,setPreview4] = useState("");
 
+    const cargarimagenleft =(e) =>{
+        const files1 = e.target.files[0];
+
+        if( files1.value !== null & files1 !== undefined){
+            setImgLeft(files1)
+
+        }else{
+            mostrarAlertError()
+            setImgLeft("")
+        }
+    }
+
+    const cargarimagenright =(e) =>{
+        const files1 = e.target.files[0];
+
+        if( files1.value !== null & files1 !== undefined){
+            setImgRigth(files1)
+
+        }else{
+            mostrarAlertError()
+            setImgRigth("")
+        }
+    }
+
     const cargarimagen =(e) => {
+        setImagenes([])
+        console.log("la cantidad de imagnes seleccionadas es:"+e.target.files.length)
         
+        var control = document.getElementById('inputGroupFile01');
+
         const files1 = e.target.files[0];
         const files2 = e.target.files[1];
+        
+        /*
+        let archivo ={};
+        
+        var i = 0,
+        files = control.files,
+        len = files.length;
+        const filtro = 'left';
+
+        for (; i < len; i++) {
+            
+          
+           console.log("Filename: " + files[i].name);
+           archivo = {name:files[i].name,type:files[i].type,size:files[i].size}
+           
+            let reader = new FileReader()
+
+            reader.readAsDataURL(files[i])
+
+            reader.onloadend = ()=>{
+                setPreview3(reader.result.toString())
+            }
+
+            console.log("preview es: " + preview3);
+
+        
+        }
+
+        setImagenes(files)
+        console.log("las imahes eson :"+imagenes)
+        var i = 0,
+        len = imagenes.length;
+
+        for (; i < len; i++) {
+            console.log("el nombre es:"+imagenes[i].name);
+        }
+
+        */
+
+        /*
+        
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function(progressEvent){
+            var fileContentArray = this.result.split(/\r\n|\n/);
+            for(var line = 0; line < lines.length-1; line++){
+            console.log(line + " --> "+ lines[line]);
+            }
+        };
+        reader.readAsText(file);*/
+
+        
         
         if( files1.value !== null & files2 !== undefined){
             setImgLeft(files1)
@@ -301,10 +390,11 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
         if(image_left){
 
             const reader = new FileReader()
+           
+            reader.readAsDataURL(image_left)
             reader.onloadend = ()=>{
                 setPreview(reader.result.toString())
             }
-            reader.readAsDataURL(image_left)
         }else{
             setPreview('')
         }
@@ -578,6 +668,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
 
 
 async function postregistrar(e){
+    
     e.preventDefault();
 
         var currentDateObj = new Date();
@@ -811,6 +902,7 @@ async function postregistrar(e){
                         <div className="row justify-content-center ">
                             <div className="col-lg-9 mb-5">
                                 <div className="card shadow-lg border-0 rounded-lg mt-5">
+                                    
                                     <div className="card-header"><h3 className="text-center font-weight-light my-4">Cargar Imagen</h3></div>
                                     <div className="card-body">
                                     <form className="row g-1" onSubmit={registrar}>
@@ -946,16 +1038,16 @@ async function postregistrar(e){
                                                 
                                                 {
                                                     image_left?
-                                                <img id="img1" src={preview} onClick={uploadFiles} className="img-thumbnail" alt="..."/>
-                                                    :<img src="" onClick={uploadFiles} className="img-thumbnail" alt="..."/>
+                                                <img id="img1" src={preview} onClick={uploadFilesleft} className="img-thumbnail" alt="..."/>
+                                                    :<img id="img1" src="" onClick={uploadFilesleft} className="img-thumbnail" alt="..."/>
                                             }
                                                 </div>
                                             <div className="col-md-6" >
                                             <label htmlFor="inputImg" className="form-label">image_right</label>
                                             {
                                                     image_right?
-                                                <img id="img2" src={preview2} onClick={uploadFiles} className="img-thumbnail" alt="..."/>
-                                                :<img src="" onClick={uploadFiles} className="img-thumbnail" alt="..."/>
+                                                <img id="img2" src={preview2} onClick={uploadFilesright} className="img-thumbnail" alt="..."/>
+                                                :<img src="" onClick={uploadFilesright} className="img-thumbnail" alt="..."/>
                                             }
                                             </div>
                                         </div>
@@ -979,13 +1071,13 @@ async function postregistrar(e){
 
                                         <div className="row mb-3" >
                                             <div className="col-md-6">
-                                            <div className="form-floating mb-3 mb-md-0">
+                                            <div className="form-floating">
                                                 <input  className="form-control" id="inputNivelEyeLeft" type="text"  value={nivel_disease_left} onChange={(e)=>updateNumber(e,"nleft") } pattern="[0-5]{0,1}"   disabled = {disabled}/>
                                                 <label htmlFor="inputNivelEyeLeft">Nivel Ojo Izquierdo</label>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-                                            <div className="form-floating mb-3 mb-md-0">
+                                            <div className="form-floating">
                                                 <input  className="form-control" id="inputNivelEyeRight" type="text" value={nivel_disease_right} onChange={(e)=>updateNumber(e,"nright") } pattern="[0-5]{0,1}" disabled = {disabled}/>
                                                 <label htmlFor="inputNivelEyeRight">Nivel Ojo Derecho</label>
                                                 </div> 
@@ -996,7 +1088,7 @@ async function postregistrar(e){
                                         <div className="row mb-3" hidden={!desabilitarcarga}>
                                             <div className="col-md-6">
                                             <div className="form-floating mb-3 mb-md-0">
-                                                <input  className="form-control" id="inputNivelEyeLeft" type="text"  value={nivel_disease_change_left}   disabled = {disabled}/>
+                                                <input  className="form-control" id="inputNivelEyeLeft" type="text" value={nivel_disease_change_left}   disabled = {disabled}/>
                                                 <label htmlFor="inputNivelEyeLeft">Nivel Ojo Izquierdo Change</label>
                                                 </div>
                                             </div>
@@ -1016,7 +1108,19 @@ async function postregistrar(e){
                                                 type="file" className="form-control" 
                                                 id="inputGroupFile01" multiple onChange={(e)=>cargarimagen(e)}/>
                                             </div>
-                                        
+
+                                            <div className="col-md-6" hidden={desabilitaronlyimg}>
+                                                <input accept='image/*' ref={referencia2}
+                                                type="file" className="form-control" 
+                                                id="inputGroupFile02" onChange={(e)=>cargarimagenleft(e)}/>
+                                            </div>
+
+                                            <div className="col-md-6" hidden={desabilitaronlyimg}>
+                                                <input accept='image/*' ref={referencia3}
+                                                type="file" className="form-control" 
+                                                id="inputGroupFile03" onChange={(e)=>cargarimagenright(e)}/>
+                                            </div>
+
                                             <div className="col-md-6">
                                                 <div className="form-floating mb-3 mb-md-0">
                                                     <input className="form-control" id="inputEmail" type="email" placeholder="name@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled/>

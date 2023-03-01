@@ -19,6 +19,7 @@ import LoginEmp from './login/loginEmp';
 import RegistroEmp from './login/registroEmp';
 import { URL_BACKEND } from '../enviroments/enviroments';
 import axiosInstance from "../axiosApi/axiosApi";
+import CargaMasiva from './cargamasiva';
 const Menuprincipal=(props)=>{
 
     let usunroDoc;
@@ -126,6 +127,11 @@ const Menuprincipal=(props)=>{
                                 Cargar Imagen
                             </Link>
 
+                            <Link to="/cargamasiva" className="nav-link" >
+                                <div className="sb-nav-link-icon"><i className="fas fa-table"></i></div>
+                                Cargar Masiva
+                            </Link>
+
                             
                             
                         </div>
@@ -151,6 +157,7 @@ const Menuprincipal=(props)=>{
                     <Route path='/registro' element={<Registro/>}/>    
                     <Route path='/registroEmp' element={<RegistroEmp servicio={servicioEmpresa} /> }/>
                     <Route path='/CargaDetPac/:servEmpId' element={<CargarDetallePaciente/> }/>
+                    <Route path='/cargamasiva/' element={<CargaMasiva/> }/>
                     
                 </Routes>
               

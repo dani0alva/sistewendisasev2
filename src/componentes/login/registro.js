@@ -296,10 +296,10 @@ return(
                                                 <div className="col-md-4">
                                                 <select className="form-select" aria-label="Default select example" onChange={(e)=>setDocumento(e.target.value)}>
                                                     <option defaultValue>Tipo Documento</option>
-                                                    <option value="DNI">DNI</option>
-                                                    <option value="PASAPORTE">Pasaporte</option>
-                                                    <option value="CARNET">Carnet de Extranjeria</option>
-                                                    <option value="LIBRETA">Libreta Electoral</option>
+                                                    <option key="1" value="DNI">DNI</option>
+                                                    <option key="2" value="PASAPORTE">Pasaporte</option>
+                                                    <option key="3" value="CARNET">Carnet de Extranjeria</option>
+                                                    <option key="4" value="LIBRETA">Libreta Electoral</option>
                                                     </select>
                                                 </div>
 
