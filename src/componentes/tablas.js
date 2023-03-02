@@ -27,13 +27,13 @@ const Tablas = () => {
     const [empresa_rs,setEmpresars]=useState(rsempresa);
 
 
-    const URL = `${URL_BACKEND}/pacientedetail/${empresa_id}`;
-
+    /*const URL = `${URL_BACKEND}/pacientedetail/${empresa_id}`;*/
+    const URLFILTROTABLA = `${URL_BACKEND}/pacientedetailTabla/${empresa_id}`;
 
     const [filterText, setFilterText] = useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 	const filteredItems = pacientes.filter(
-		item => item.paciente_nroDoc && item.paciente_nroDoc.toLowerCase().includes(filterText.toLowerCase()),
+		item => item.Usuario.last_name && item.Usuario.last_name.toLowerCase().includes(filterText.toLowerCase()),
 	);
 
     const navigate = useNavigate()
@@ -66,7 +66,7 @@ const Tablas = () => {
 
     const listar=()=>{
         if(idempresa >0){ 
-            axiosInstance.get(URL)
+            axiosInstance.get(URLFILTROTABLA)
              .then(response=>{
                 setPacientes(response.data);
              })
@@ -75,6 +75,8 @@ const Tablas = () => {
 
              })
             }
+
+        console.log(pacientes)
          }
      
     useEffect(()=>{
@@ -120,7 +122,7 @@ const Tablas = () => {
 
                                 onRowClicked={(row)=>handlerServicioDetalle(row)}
                                 fixedHeader
-		                        fixedHeaderScrollHeight='600px'
+		                        fixedHeaderScrollHeight='1000px'
                                 paginationRowsPerPageOptions={[10, 15]}
                                 theme='light'
 
@@ -128,7 +130,6 @@ const Tablas = () => {
                                 highlightOnHover={true}
                                 /*customStyles={customStyles}*/
                                 striped={true}
-                            
                                 
                                 />
                                 :

@@ -15,30 +15,37 @@ const  base_data_table ={
             name: 'Nero.Doc',
             selector: row => row.paciente_nroDoc,
             sortable: true,
+            width:'1',
         },
+
+        {
+            name: 'Nombres y Apellidos',
+            selector: row => row.Usuario.first_name+' '+row.Usuario.last_name,
+            sortable: true,
+            width:'20',
+        },
+        
         
         {
             name: 'email',
             selector: row => row.Usuario.username,
             sortable: true,
+            width:'10',
         },
        
         {
             name: 'Sexo',
             selector: row => row.paciente_sex,
             sortable: true,
+            minWidth:'2',
+            minWidth:'1',
         },
-        {
-            name: 'Telefono',
-            selector: row => row.paciente_tel,
-            sortable: true,
-        },
-
-    
+        
         {
             name: 'fecha_Nac.',
             selector: row => row.paciente_fechanac,
             sortable: true,
+            width:'5',
         },
 /*
         {

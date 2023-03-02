@@ -8,7 +8,7 @@ const baseURL = URL_BACKEND
 const axiosInstance = axios.create({
     credentials: 'include',
     baseURL: baseURL,
-    timeout: 30000,
+    timeout: 100000,
     headers: {
         Authorization: localStorage.getItem("access_token")
             ? "JWT " + localStorage.getItem("access_token")

@@ -31,6 +31,7 @@ const Dashboard = () => {
 
     const URLResumen = `${URL_BACKEND}/pacienteResumen/${empresa_id}`;
 
+    const URLFILTROTABLA = `${URL_BACKEND}/pacientedetailTabla/${empresa_id}`;
 
     const cargar_grafico=(array_resumen)=>{
      
@@ -84,8 +85,9 @@ const Dashboard = () => {
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     
     const filteredItems = pacientes.filter(
-		item => item.paciente_nroDoc && item.paciente_nroDoc.toLowerCase().includes(filterText.toLowerCase()),
+		item => item.Usuario.last_name && item.Usuario.last_name.toLowerCase().includes(filterText.toLowerCase()),
 	);
+
     
     const navigate = useNavigate()
     const handlerServicioDetalle = (fila) => {
@@ -111,7 +113,7 @@ const Dashboard = () => {
 
     const listar=()=>{
         if(idempresa >0){
-            axiosInstance.get(URL)
+            axiosInstance.get(URLFILTROTABLA)
         .then(response=>{
            setPacientes(response.data);
         })

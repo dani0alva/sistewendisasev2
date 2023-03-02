@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 
 const CargarDetallePaciente =({ label, checked, ...props })=>{
 
-
+    
     const buttonRef = useRef(null);
     const checkRef = useRef(null);
 
@@ -62,8 +62,10 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     const [etiqueta, setEtiqueta] = useState("Cargar Nivel");
 
     const [image_left,setImgLeft] = useState(null);
+    const [ident_disase,setident_disase] = useState(null);
     const [image_right,setImgRigth] = useState(null);
     const [pacientes,setPacientes]=useState([]);
+    const [pacientesr,setPacientesr]=useState([]);
 
     const [imagenes,setImagenes]=useState(null);
 
@@ -101,15 +103,19 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
 
     const [model, setModel] = useState();
 
-    const URL = `${URL_BACKEND}/pacientedetail/${empresa_id}`;
+    const URL = `${URL_BACKEND}/pacientedetail/`;
     const URLDISASE = `${URL_BACKEND}/disase/`;
     const URLGUARDAR = `${URL_BACKEND}/diagnostico/`;
     const URLACTUALIZAR = `${URL_BACKEND}/diagnosticodetail/${iddiagnostico}`; 
-    const URLFILTRO = `${URL_BACKEND}/pacientefiltro/${servEmpId}`;  
+    const URLFILTRO = `${URL_BACKEND}/pacientedetailPac/${servEmpId}`;  
+
+    const URLFILTROCOMBO = `${URL_BACKEND}/pacientedetailCombo/${empresa_id}`;  
+
+    
     
 
     let  response = [];
-
+    let response2=null;
    
     //const handlehabilitar = () => {
     async function handlehabilitar() {
@@ -185,58 +191,6 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
 
         const files1 = e.target.files[0];
         const files2 = e.target.files[1];
-        
-        /*
-        let archivo ={};
-        
-        var i = 0,
-        files = control.files,
-        len = files.length;
-        const filtro = 'left';
-
-        for (; i < len; i++) {
-            
-          
-           console.log("Filename: " + files[i].name);
-           archivo = {name:files[i].name,type:files[i].type,size:files[i].size}
-           
-            let reader = new FileReader()
-
-            reader.readAsDataURL(files[i])
-
-            reader.onloadend = ()=>{
-                setPreview3(reader.result.toString())
-            }
-
-            console.log("preview es: " + preview3);
-
-        
-        }
-
-        setImagenes(files)
-        console.log("las imahes eson :"+imagenes)
-        var i = 0,
-        len = imagenes.length;
-
-        for (; i < len; i++) {
-            console.log("el nombre es:"+imagenes[i].name);
-        }
-
-        */
-
-        /*
-        
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onload = function(progressEvent){
-            var fileContentArray = this.result.split(/\r\n|\n/);
-            for(var line = 0; line < lines.length-1; line++){
-            console.log(line + " --> "+ lines[line]);
-            }
-        };
-        reader.readAsText(file);*/
-
-        
         
         if( files1.value !== null & files2 !== undefined){
             setImgLeft(files1)
@@ -465,22 +419,24 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
     const listar=()=>{
         if(empresa_id >0){
         if( servEmpId !== null & servEmpId !== undefined){
+            
+            console.log("la url es",URLFILTRO)
             axiosInstance.get(URLFILTRO)
             .then(response=>{
-                setPacientes([response.data]);
+                const valor=response.data
+                setPacientes(response.data);
             })
             .catch(error=>{
                 console.log(error);
-
             })
              
          }else{
             /*lista los pacientes*/ 
-
-            
-            axiosInstance.get(URL)
+            setident_disase("1")
+            axiosInstance.get(URLFILTROCOMBO)
             .then(response=>{
-               setPacientes(response.data);
+                setPacientes(response.data);
+                console.log("los paciente son: ",response.data)
             })
             .catch(error=>{
                 console.log(error);
@@ -503,10 +459,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
 
     useEffect(()=>{
 
-        
-
         listar(); 
-        
             
          },[])
 
@@ -518,7 +471,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
         if( servEmpId !== null & servEmpId !== undefined){
         setDesabilitarcarga(true)
          }
-    },[])
+    },[])                                   
 
 
     const setCamposDiagnostico = (id) => { 
@@ -530,7 +483,7 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
             setImgRigth("")
 
             
-            array2=pacientes.filter((list) => list.paciente_id==idpaciente)
+            array2=pacientesr.filter((list) => list.paciente_id==idpaciente)
 
            
             setPreview3(array2[0].paciente_diagnostico.filter((list) => list.diag_id==id)[0].diag_img_eye_left);
@@ -550,32 +503,6 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
             setResponsableDni(usunroDoc);   
 
 
-            /*
-            for (let i = 0; i <= 5; i++) {
-
-                if(pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_id==id)
-                {
-                setPreview3(pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_img_eye_left);
-                setPreview4(pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_img_eye_right);
-                
-                let nivelleft = pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_nivel_disease_left
-                let nivelrigth = pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_nivel_disease_right
-                let nivelchangeleft = pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_nivel_disease_change_left
-                let nivelchangerigth = pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_nivel_disease_change_right
-                let usunroDoc =  pacientes.filter((list) => list.paciente_id==idpaciente)[0].paciente_diagnostico[i].diag_rnroDoc
-
-                set_Nivel_Disease_Left(nivelleft)
-                set_Nivel_Disease_Change_Left(nivelchangeleft)
-
-                set_Nivel_Disease_Right(nivelrigth)
-                set_Nivel_Disease_Change_Right(nivelchangerigth)
-                setResponsableDni(usunroDoc);
-
-                break;
-                }
-            }*/
-
-            
 
         }else{
 
@@ -593,43 +520,49 @@ const CargarDetallePaciente =({ label, checked, ...props })=>{
   
  
 }
-    const setCamposPaciente  = (id) => {
+    async function setCamposPaciente(id){
+    /*const setCamposPaciente = (id) =>{*/
 
      if( id !== null & id !== undefined){
         if(id!=="Nero Docu."){
-
+            response2=await axiosInstance.get(URL+id)
+            
             /*document.getElementById(`inputFirstName`).value=pacientes.filter((list) => list.paciente_id==id)[0].Usuario.first_name; 
             document.getElementById(`inputLastName`).value=pacientes.filter((list) => list.paciente_id==id)[0].Usuario.last_name;
             */
+           setPacientesr(response2.data);
+           console.log("el pacientr es: ",pacientesr)
+           console.log("el pacientr es: ",response2.data)
+           
 
-            setIdPaciente(id);
-            setNombre(pacientes.filter((list) => list.paciente_id==id)[0].Usuario.first_name);
-            setApellido(pacientes.filter((list) => list.paciente_id==id)[0].Usuario.last_name);
-            setNombreCompleto(pacientes.filter((list) => list.paciente_id==id)[0].Usuario.first_name+' '+pacientes.filter((list) => list.paciente_id==id)[0].Usuario.last_name);
-            setEmail(pacientes.filter((list) => list.paciente_id==id)[0].Usuario.email);
-            setDireccion(pacientes.filter((list) => list.paciente_id==id)[0].paciente_dir);
-            setTelefono(pacientes.filter((list) => list.paciente_id==id)[0].paciente_tel);
-            setNroDoc(pacientes.filter((list) => list.paciente_id==id)[0].paciente_nroDoc);
+                setIdPaciente(id);
+                setNombre(response2.data[0].Usuario.first_name);
+                setApellido(response2.data[0].Usuario.last_name);
+                setNombreCompleto(response2.data[0].Usuario.first_name+' '+response2.data[0].Usuario.last_name);
+                setEmail(response2.data[0].Usuario.email);
+                setDireccion(response2.data[0].paciente_dir);
+                setTelefono(response2.data[0].paciente_tel);
+                setNroDoc(response2.data[0].paciente_nroDoc);
 
-            if(pacientes.filter((list) => list.paciente_id==id)[0].paciente_sex=="M"){
-                setChecked1(true);
-                setChecked2(false);
-            }else{
-                setChecked2(true);
-                setChecked1(false);
-            }
+                if(response2.data[0].paciente_sex=="M"){
+                    setChecked1(true);
+                    setChecked2(false);
+                }else{
+                    setChecked2(true);
+                    setChecked1(false);
+                }
 
-            let fecha1 = new Date(pacientes.filter((list) => list.paciente_id==id)[0].paciente_fechanac);
-            let fecha2 = new Date()
+                let fecha1 = new Date(response2.data[0].paciente_fechanac);
+                let fecha2 = new Date()
 
-            let resta = fecha2.getTime() - fecha1.getTime()
+                let resta = fecha2.getTime() - fecha1.getTime()
 
-            document.getElementById(`inputEdad`).value=Math.round(resta/ (1000*60*60*24*365))
+                document.getElementById(`inputEdad`).value=Math.round(resta/ (1000*60*60*24*365))
 
-            setEdad(Math.round(resta/ (1000*60*60*24*365)));
-            setDesabilitarcombo(true);
+                setEdad(Math.round(resta/ (1000*60*60*24*365)));
+                setDesabilitarcombo(true);
             
-
+           
 
         }else{
             setIdPaciente("");
@@ -909,6 +842,8 @@ async function postregistrar(e){
                                         <div className="row mb-3">
                                         <div className="col-md-3">
 
+                                            
+                                       
                                                     <select id="inputIdPaciente" className="form-select" aria-label="Default select example" onChange={(e) => setCamposPaciente(e.target.value)}>
                                                     
                                                     <option  defaultValue="default" >Nero Docu.</option>
@@ -923,7 +858,8 @@ async function postregistrar(e){
                                                     )
                                                     }
                                                     </select>
-                                              
+                                                   
+                                         
                                         </div>
                                             <div className="col-md-6" >
                                             <div className="form-floating mb-3 mb-md-0">
@@ -933,7 +869,7 @@ async function postregistrar(e){
                                             </div>
                                             
 
-                                            <div className="col-md-3" hidden={desabilitarcarga}>
+                                        <div className="col-md-3" hidden={desabilitarcarga}>
                                             
                                             <select  id="inputIdDisase" className="form-select" aria-label="Default select example" value={iddisase} onChange={(e)=>set_Iddisase(e.target.value)}>
                                                 
@@ -951,15 +887,14 @@ async function postregistrar(e){
                                             </select>
 
                                         </div>
-                                                    
-                                            <div className="col-md-3" hidden={!desabilitarcarga}>
-                                            
-                                                <select disabled={!desabilitarcombo} id="inputIdDiagnostico" className="form-select" aria-label="Default select example" onChange={(e) => setCamposDiagnostico(e.target.value)}>
+                                           
+                                        <div className="col-md-3" hidden={!desabilitarcarga}>
+                                           <select disabled={!desabilitarcombo} id="inputIdDiagnostico" className="form-select" aria-label="Default select example" onChange={(e) => setCamposDiagnostico(e.target.value)}>
                                                     
                                                     <option  defaultValue="default" >Diagnostico</option>
                                                     
                                                     { 
-                                                    pacientes.map((paciente)=>(
+                                                    pacientesr.map((paciente)=>(
 
                                                         paciente.paciente_diagnostico.map((diagnostico)=>(
 
@@ -973,9 +908,8 @@ async function postregistrar(e){
 
                                                 </select>
 
-                                            </div>
-                                     
-                                            
+                                           
+                                                </div> 
                                         </div>
                                         
                                         <div className="row mb-3">
